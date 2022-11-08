@@ -1,0 +1,38 @@
+{% extends 'social/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row" mt-5>
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'post-list' %}">Back To Feed</a>
+        </div>
+    </div>
+
+    <div class="row" justify-content-center mt-3>
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <p><strong> {{ post.creator }} </strong> {{ post.posted_on }} </p>
+            <p>{{ post.caption }}</p>
+        </div>
+    </div>
+</div>
+<div class="row" justify-content-center mt-3>
+    <div class="col-md-5 col-sm-12 border-bottom">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <div class="d-grid gap 2">
+                <button type="submit">Add Comment</button>
+            </div>
+    </div>
+    {% for comment in comments %}
+    <div class="row justify-content-center mt-3 mb-5 border-bottom">
+        <div class="col-md-5 col-sm-12"></div>
+        <p><strong>{{comment.author}} </strong>commented <strong>{{comment.comment}}</strong> on <strong>{{comment.created_on}}</strong></strong></p>
+        {% if request.user == comment.author or request.user == post.creator %}
+        <a href="{% url 'comment-delete' post.pk comment.pk %}" class = 'btn-light btn-stretchy-link'>DeleteComment</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

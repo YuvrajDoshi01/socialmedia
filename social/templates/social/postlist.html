@@ -1,0 +1,49 @@
+{% extends 'social/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div>
+        <a href="http://127.0.0.1:8000/accounts/logout">Logout</a>
+    </div>
+    <div>
+    <a href="{%url 'post-add' %}" class="btn btn-stretched-link">Post Something</a>
+    </div>
+    {% for post in post_list %}
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom postion-relative">
+            <p><a href="{% url 'profile' post.creator.pk %}"> @{{ post.creator }}</a> {{ post.posted_on }} </p>
+            <div>
+                <p>{{  post.caption }}</p>
+            
+             <a href="{% url 'post-detail' post.id %}" class = "btn btn-stretched-link">ViewPost</a> 
+             <a href="{% url 'post-edit' post.id %}" class = "btn btn-stretched-link">EditPost</a>
+             <a href="{% url 'post-delete' post.id %}" class = "btn btn-stretched-link">DeletePost</a>
+            </div>
+            <!--post.id sabka 1 aa rha hai using this method , find the solution to this maybe django me bug hai-->
+            <div class="d-flex flex-row">
+                <form method="post" action="{% url 'like' post.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button style="background-color: transparent;border: none;box-shadow:none"type ="submit"> 
+                        <i class="far fa-thumbs-up">Like</i>
+                        <span>{{ post.likes.all.count }}</span>
+                        <!-- <a href="{% url 'like' post.pk %}" class = "btn btn-stretched-link">LikePost</a> -->
+                    </button>
+                </form>
+            </div>
+            <div class="d-flex flex-row">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <form method="post" action="{% url 'dislike' post.pk %}">
+                    {% csrf_token %}
+                        <button style="background-color: transparent;border: none;box-shadow:none"type ="submit"> 
+                            <i class="far fa-thumbs-down">Dislike</i>
+                            <span>{{ post.dislikes.all.count }}</span>
+                        </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

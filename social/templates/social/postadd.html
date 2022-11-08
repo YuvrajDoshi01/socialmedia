@@ -1,0 +1,29 @@
+{% extends 'social/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+    <div class="row" mt-5>
+        <div class="col-md-5 col-sm-6">
+            <a href="{% url 'post-list' %}">Back To Feed</a>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-5 col-sm-12 border-bottom">
+                <h5>Add a Post</h5>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-5 col-sm-12 border-bottom">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <div class="d-grid gap 2">
+                        <button type="submit" >Add Post</button>
+                    </div> 
+            </div>
+        </div>
+    </div>
+{% endblock content %}
